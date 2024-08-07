@@ -2,19 +2,18 @@ const express = require("express");
 const Vigenere = require("caesar-salad").Vigenere;
 const app = express();
 const port = 8000;
-const password = "password";
 
-app.get("/:text", (req, res) => {
-  return res.send(req.params.text);
-});
+app.use(express.json());
 
-app.get("/encode/:text", (req, res) => {
-  const codedText = Vigenere.Cipher(password).crypt(req.params.text);
+app.post("/encode", (req, res) => {
+  const password = req.body.password;
+  const codedText = Vigenere.Cipher(password).crypt(req.body.message);
   return res.send("Зашифрованый текст: " + codedText);
 });
 
-app.get("/decode/:text", (req, res) => {
-  const decodedText = Vigenere.Decipher(password).crypt(req.params.text);
+app.post("/decode", (req, res) => {
+  const password = req.body.password;
+  const decodedText = Vigenere.Decipher(password).crypt(req.body.message);
   return res.send("Расшифрованый текст: " + decodedText);
 });
 
